@@ -21,7 +21,7 @@ function App() {
   };
 
   const dataToShow = articles.length > 0 ? articles : dummyNews;
-
+  console.log(articles);
   return (
     <div className="app">
       <Navbar onSearch={handleSearch} />
