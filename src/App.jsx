@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./Navbar";
 import { fetchNewsFromSources, fetchNewsAtStart } from "./searchService.js";
+import Carousel from "./Carousel.jsx";
+import { PropagateLoader } from "react-spinners";
 import "./App.css";
 
 function formatDate(isoDate, useLocalTime = true) {
@@ -17,7 +19,7 @@ function formatDate(isoDate, useLocalTime = true) {
 
 function ToWebButton({ url }) {
   return (
-    <button onClick={() => window.open(url, "_blank")}>
+    <button className="toUrl-btn" onClick={() => window.open(url, "_blank")}>
       Go to URL
     </button>
   );
@@ -34,38 +36,65 @@ function App() {
   const [selectedNews, setSelectedNews] = useState(null);
   const [articles, setArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12; // jumlah berita per halaman
+  const [isSearch, setisSearch] = useState(true);
+  const [lastQuery, setLastQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const pageSize = 15;
+  const carouselItem = useRef(null);
 
   useEffect(() => {
     const fetchInitialNews = async () => {
       try {
+        setLoading(true);
         const results = await fetchNewsAtStart();
         setArticles(results);
       } catch (err) {
         console.error("Error fetching news at start:", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchInitialNews();
   }, []);
-
+  
   const handleSearch = async (query) => {
-    const results = await fetchNewsFromSources(query);
-    setArticles(results);
-    setSelectedNews(null);
-    setCurrentPage(1); // reset ke halaman 1
+    try {
+      setLoading(true);
+      const results = await fetchNewsFromSources(query);
+      setArticles(results);
+      setSelectedNews(null);
+      setCurrentPage(1);
+      setisSearch(false);
+      setLastQuery(query);
+    } catch (err) {
+      console.error("Error fetching news:", err);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
-  const dataToShow = articles.length > 0 ? articles : dummyNews;
+  const dataToShow = articles;
 
   // 🔹 Pagination logic
   const totalPages = Math.ceil(dataToShow.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedData = dataToShow.slice(startIndex, startIndex + pageSize);
+  const TempData = dataToShow.slice(startIndex, startIndex + pageSize);
+  carouselItem.current = currentPage === 1 ? TempData.slice(0, 3) : carouselItem.current;
+  const paginatedData = currentPage === 1 ? TempData.slice(3) : TempData;
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
+  if (loading) {
+    return (
+      <div className="loading">
+        <PropagateLoader color="#36d7b7" size={15} />
+      </div>
+    );
+  }
+  
   return (
     <div className="app">
       <Navbar onSearch={handleSearch} />
@@ -74,12 +103,12 @@ function App() {
           // Halaman Detail Berita
           <div className="news-detail">
             <img
-              src={selectedNews.image || "https://placehold.co/800x600?text=No+Image"}
+              src={selectedNews.image || "Noimage.svg"}
               alt={selectedNews.title}
               className="news-detail-img"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = "https://placehold.co/800x600?text=No+Image";
+                e.target.src = "Noimage.svg";
               }}
             />
             <h1>{selectedNews.title}</h1>
@@ -88,13 +117,24 @@ function App() {
             <p className="content-text">{selectedNews.content}</p>
             <ToWebButton url={selectedNews.url} />
             <button className="back-btn" onClick={() => setSelectedNews(null)}>
-              ← Kembali
+              Back
             </button>
           </div>
         ) : (
           // Halaman List Berita
           <div className="news-list">
-            <h1 className="title">Berita Terbaru</h1>
+            {isSearch && (
+              <Carousel 
+                items={carouselItem.current} // langsung ambil objek berita utuh
+                interval={4000}
+                onItemClick={(news) => setSelectedNews(news)} // kirim callback
+              />
+            )}
+            {isSearch ? (
+              <h1 className="title">Latest News</h1>
+              ):(
+              <h1 className="title">{articles.length} articles found for '{lastQuery}'</h1>
+            )}
             <div className="news-grid">
               {paginatedData.length > 0 ? (
                 paginatedData.map((news, index) => (
@@ -104,12 +144,12 @@ function App() {
                     onClick={() => setSelectedNews(news)}
                   >
                     <img
-                      src={news.image || "https://placehold.co/120x80?text=No+Image"}
+                      src={news.image || "Noimage.svg"}
                       alt={news.title}
                       className="news-thumb"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "https://via.placeholder.com/120x80";
+                        e.target.src = "Noimage.svg";
                       }}
                     />
                     <div className="news-info">
@@ -119,9 +159,14 @@ function App() {
                   </div>
                 ))
               ) : (
-                <p>Tidak ada berita ditemukan.</p>
+                !isSearch && lastQuery ? (
+                  <p>Search for '{lastQuery}' not found.</p>
+                ) : (
+                  <p>Tidak ada berita ditemukan.</p>
+                )
               )}
             </div>
+
 
             {/* 🔹 Pagination controls */}
             <div className="pagination">

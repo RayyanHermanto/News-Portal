@@ -8,6 +8,12 @@ body, html, #root {
   justify-content: center;
 }
 
+#root .loading {
+  display: flex;
+  justify-content: center; /* rata tengah horizontal */
+  align-items: center;     /* rata tengah vertical */
+  height: 100vh;
+}
 /* Content */
 .content {
   padding: 100px 24px 40px; /* kasih jarak biar gak ketutupan navbar */
@@ -22,18 +28,21 @@ body, html, #root {
 
 /* Grid berita */
 .news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
+  flex-direction: column;   /* susun kebawah */
+  align-items: center;      /* biar rata tengah horizontal */
   gap: 20px;
 }
 
 .news-card {
+  width: 60vw;              /* lebar 30% dari viewport width */
   background: white;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 .news-card h2 {
   font-size: 18px;
@@ -52,31 +61,45 @@ body, html, #root {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Detail Berita */
 .news-detail {
   background: white;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+  max-width: 800px;       /* batas lebar biar gak kepanjangan */
+  width: 90%;             /* pakai 90% layar di device kecil */
+  margin: 20px auto;      /* tengah secara horizontal */
 }
 
 .news-detail h1 {
   margin: 0 0 12px;
-  font-size: 24px;
+  font-size: clamp(20px, 2.5vw, 28px);  /* responsif */
   color: black;
 }
 
 .news-detail .date {
-  font-size: 14px;
+  font-size: clamp(12px, 1.5vw, 14px);
   color: gray;
-  margin-bottom: 20px;
+  text-align: left;
 }
 
 .news-detail .content-text {
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px);
   line-height: 1.6;
   margin-bottom: 20px;
   color: black;
+  text-align: justify; /* rapi kanan-kiri */
+}
+
+.news-detail img {
+  max-height: 300px;   /* batasi tinggi */
+  width: auto;         /* biarkan lebar menyesuaikan */
+  max-width: 100%;     /* jangan sampai keluar kontainer */
+  object-fit: contain; /* atau cover kalau mau penuh */
+  border-radius: 12px;
+  margin: 0 auto 20px; /* tengah horizontal + jarak bawah */
+  display: block;      /* biar margin auto bekerja */
 }
 
 .back-btn {
@@ -87,6 +110,16 @@ body, html, #root {
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+}
+.toUrl-btn {
+  padding: 10px 18px;
+  border: none;
+  background: #000000;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
 }
 
 .back-btn:hover {
@@ -124,4 +157,12 @@ body, html, #root {
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 20px;
+}
+.pagination {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center; /* rata tengah horizontal */
+  align-items: center;     /* kalau butuh rata tengah vertical */
+}
+.pagination button h2 {
 }

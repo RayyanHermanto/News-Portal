@@ -18,10 +18,15 @@ function Navbar({ onSearch }) {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src={viteLogo} alt="Logo" className="logo" />
-        <span className="brand">NewsPortal</span>
+        <img
+          src="logo.png"
+          alt="Logo"
+          className="logo"
+          style={{ cursor: "pointer" }}
+          onClick={() => window.location.reload()}
+        />
+        {/* <span className="brand">NewsPortal</span> */}
       </div>
-
       <div className="navbar-right">
         {isSearching ? (
           <form onSubmit={handleSearch} className="search-form">

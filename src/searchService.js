@@ -1,7 +1,7 @@
 export async function fetchNewsFromSources(query) {
   try {
     // const response = await fetch(`https://your-render-app.onrender.com/api/news?q=${encodeURIComponent(query)}`);
-    const response = await fetch(`https://backend-production-8abc.up.railway.app/api/news?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`http://localhost:3000/api/news?q=${encodeURIComponent(query)}`);
     const data = await response.json();
 
     return data.results || [];
@@ -13,7 +13,7 @@ export async function fetchNewsFromSources(query) {
 
 export async function fetchNewsAtStart(){
   try {
-    const response = await fetch(`https://backend-production-8abc.up.railway.app/api/newStart`);
+    const response = await fetch(`http://localhost:3000/api/newStart`);
     const data = await response.json();
 
     return data.results || [];
