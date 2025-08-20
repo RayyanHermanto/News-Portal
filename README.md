@@ -64,7 +64,7 @@ News-Portal/
 ├─ public/               # Static assets
 ├─ src/
 │  ├─ components/        # React components
-│  ├─ services/          # API fetch logic
+│  ├─ searchServices.js          # API fetch logic
 │  ├─ App.jsx            # Main App component
 │  └─ main.jsx           # React entry point
 ├─ package.json
