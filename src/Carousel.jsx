@@ -25,7 +25,14 @@ function Carousel({ items, interval = 3000, onItemClick }) {
             onClick={() => onItemClick && onItemClick(item)} // tambahkan onClick
             style={{ cursor: onItemClick ? "pointer" : "default" }}
             >
-            <img src={item.image || "Noimage.svg"} alt={item.title} />
+            <img 
+                src={item.image || "Noimage.svg"} 
+                alt={item.title} 
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "Noimage.svg";
+                  }}
+            />
             <div className="carousel-caption">
                 <h3>{item.title}</h3>
                 <p>{item.content || ""}</p>

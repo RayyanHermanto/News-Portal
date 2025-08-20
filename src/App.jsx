@@ -90,7 +90,7 @@ function App() {
   if (loading) {
     return (
       <div className="loading">
-        <PropagateLoader color="#36d7b7" size={15} />
+        <PropagateLoader color="#FF0066" size={15} />
       </div>
     );
   }
@@ -162,7 +162,7 @@ function App() {
                 !isSearch && lastQuery ? (
                   <p>Search for '{lastQuery}' not found.</p>
                 ) : (
-                  <p>Tidak ada berita ditemukan.</p>
+                  <p style={{color:"black"}}>No articles found.</p>
                 )
               )}
             </div>
@@ -171,11 +171,11 @@ function App() {
             {/* 🔹 Pagination controls */}
             <div className="pagination">
               <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                ← Previous
+                Previous
               </button>
-              <span>Page {currentPage} of {totalPages}</span>
+              <span className="page">Page {currentPage} of {totalPages === 0 ? 1 : totalPages}</span>
               <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                Next →
+                Next
               </button>
             </div>
           </div>

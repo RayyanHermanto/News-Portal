@@ -1,76 +1,97 @@
 .carousel {
-    position: relative;
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto 40px;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-  
-  /* Tombol navigasi panah */
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 30px;
-    color: white;
-    background: rgba(0,0,0,0.4);
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: none; /* default sembunyi */
-    z-index: 10;
-    transition: background 0.2s;
-  }
-  
-  .carousel-btn:hover {
-    background: rgba(0,0,0,0.7);
-  }
-  
-  .carousel-btn.left {
-    left: 12px;
-  }
-  
-  .carousel-btn.right {
-    right: 12px;
-  }
-  
-  /* Muncul saat hover carousel */
-  .carousel:hover .carousel-btn {
-    display: block;
-  }
-  
-  .carousel-item {
-    display: none;
-    width: 100%;
-    transition: opacity 0.5s ease-in-out;
-  }
-  
-  .carousel-item.active {
-    display: block;
-  }
-  
-  .carousel img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-  }
-  
+  position: relative;
+  width: 100%;
+  max-width: 900px; /* carousel bisa besar di desktop */
+  margin: 0 auto 40px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Tombol navigasi panah */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(20px, 3vw, 32px); /* ukuran fleksibel */
+  color: white;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  padding: 0.5em 0.75em;
+  cursor: pointer;
+  display: none; /* default sembunyi */
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.carousel-btn:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.carousel-btn.left {
+  left: 12px;
+}
+
+.carousel-btn.right {
+  right: 12px;
+}
+
+/* Muncul saat hover carousel */
+.carousel:hover .carousel-btn {
+  display: block;
+}
+
+.carousel-item {
+  display: none;
+  width: 100%;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+  display: block;
+}
+
+.carousel img {
+  width: 100%;
+  height: auto;               /* biar ikut proporsi asli */
+  max-height: 60vh;           /* maksimal 60% tinggi layar */
+  object-fit: cover;
+}
+
+/* Caption fleksibel */
+.carousel-caption {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  color: white;
+  text-shadow: 0 0 6px rgba(0,0,0,0.7);
+  width: 50vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+.carousel-caption h3 {
+  margin: 0 0 4px;
+  font-size: clamp(16px, 2.5vw, 22px); /* adaptif */
+}
+
+.carousel-caption p {
+  margin: 0;
+  font-size: clamp(12px, 2vw, 16px);
+}
+
+/* Media query untuk layar kecil */
+@media (max-width: 600px) {
   .carousel-caption {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    color: white;
-    text-shadow: 0 0 6px rgba(0,0,0,0.7);
-  }
-  
-  .carousel-caption h3 {
-    margin: 0 0 4px;
-  }
-  
-  .carousel-caption p {
-    margin: 0;
+    -webkit-line-clamp: 1; /* di HP kecil hanya 1 baris */
     font-size: 14px;
   }
-  
+
+  .carousel-btn {
+    font-size: 22px; /* tombol lebih kecil di HP */
+    padding: 0.4em 0.6em;
+  }
+}
