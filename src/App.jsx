@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar.jsx";
 import { fetchNewsFromSources, fetchNewsAtStart } from "./searchService.js";
-import Carousel from "./Carousel.jsx";
+import Carousel from "./components/Carousel.jsx";
 import { PropagateLoader } from "react-spinners";
 import "./App.css";
 
